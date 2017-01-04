@@ -8,5 +8,7 @@ Getting Started
 
 - $VENV/bin/pip install -e .
 
+- $VENV/bin/initialize_users_gist_db development.ini
+
 - $VENV/bin/pserve development.ini
 

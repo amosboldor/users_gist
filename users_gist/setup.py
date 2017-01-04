@@ -17,6 +17,7 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
+    'passlib'
     ]
 
 tests_require = [
@@ -50,6 +51,6 @@ setup(name='users_gist',
       [paste.app_factory]
       main = users_gist:main
       [console_scripts]
-      initialize_users_gist_db = users_gist.scripts.initializedb:main
+      initialize_db = users_gist.scripts.initializedb:main
       """,
       )

@@ -4,16 +4,84 @@ from pyramid.view import view_config
 from sqlalchemy.exc import DBAPIError
 
 from ..models import MyModel
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember, forget
+from ..security import check_credentials
+from passlib.apps import custom_app_context as pwd_context
 
 
-@view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-def my_view(request):
+@view_config(route_name="home", renderer="../templates/home.jinja2")
+def home_list(request):
+    """View for the home page."""
     try:
         query = request.dbsession.query(MyModel)
-        one = query.filter(MyModel.name == 'one').first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'users_gist'}
+    return {'users': query}
+
+
+@view_config(route_name='login',
+             renderer='../templates/login.jinja2',
+             require_csrf=False)
+def login(request):
+    """Login View."""
+    if request.method == 'POST':
+        username = request.params.get('Username', '')
+        password = request.params.get('Password', '')
+        if check_credentials(username, password, request):
+            headers = remember(request, username)
+            return HTTPFound(location=request.route_url('home'),
+                             headers=headers)
+    return {}
+
+
+@view_config(route_name="user", renderer="../templates/user.jinja2", permission="write")
+def detail(request):
+    """View for the detail page."""
+    query = request.dbsession.query(MyModel)
+    user_dict = query.filter(MyModel.user_name == request.matchdict['user']).first()
+    import pdb; pdb.set_trace()
+    return {"user": user_dict}
+
+
+@view_config(route_name="register", renderer="../templates/register.jinja2")
+def create(request):
+    """View for new entry page."""
+    if request.method == "POST":
+        username = request.params.get('Username', '')
+        password = request.params.get('Password', '')
+
+        first_name = request.params.get('first_name', '')
+        last_name = request.params.get('last_name', '')
+
+        email = request.params.get('email', '')
+        food = request.params.get('food', '')
+
+        new_model = MyModel(first_name=first_name,
+                            last_name=last_name,
+                            user_name=username,
+                            email=email,
+                            fav_food=food,
+                            password=pwd_context.hash(password))
+        request.dbsession.add(new_model)
+        return HTTPFound(location=request.route_url('home'))
+    return {}
+
+
+# @view_config(route_name="update", renderer="../templates/edit_entry.jinja2")
+# def update(request):
+#     """View for update page."""
+#     if request.method == "POST":
+#         title = request.POST["title"]
+#         body = request.POST["body"]
+#         creation_date = datetime.date.today().strftime("%m/%d/%Y")
+#         query = request.dbsession.query(Entry)
+#         post_dict = query.filter(Entry.id == request.matchdict['id'])
+#         post_dict.update({"title": title, "body": body, "creation_date": creation_date})
+#         return HTTPFound(location=request.route_url('home'))
+#     query = request.dbsession.query(Entry)
+#     post_dict = query.filter(Entry.id == request.matchdict['id']).first()
+#     return {"post": post_dict}
 
 
 db_err_msg = """\

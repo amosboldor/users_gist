@@ -1,0 +1,3 @@
+[run]
+source = users_gist
+omit = users_gist/test*

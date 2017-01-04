@@ -1,0 +1,10 @@
+{% extends "layout.jinja2" %}
+{% block main %}
+<main class="container">
+    <h1>First Name: {{ user.first_name }}</h1>
+    <h1>Last Name: {{ user.last_name }}</h1>
+    <h1>Username: {{ user.user_name }}</h1>
+    <h1>Email: {{ user.email }}</h1>
+    <h1>Food: {{ user.food }}</h1>
+</main>
+{% endblock %}

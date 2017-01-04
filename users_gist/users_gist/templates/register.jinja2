@@ -1,0 +1,40 @@
+{% extends "layout.jinja2" %}
+{% block main %}
+<main class="container">
+    <div class="form-group">
+        <form  method="POST">
+            <h1>Register</h1>
+            <label for="first_name">First Name:</label>
+            <input class="form-control" rows="5" id="name" type="text" name="first_name"></input>
+
+            <br>
+
+            <label for="last_name">Last Name:</label>
+            <input class="form-control" rows="5" id="name" type="text" name="last_name"></input>
+
+            <br>
+
+            <label for="email">Email:</label>
+            <input class="form-control" rows="5" id="name" type="text" name="email"></input>
+
+            <br>
+
+            <label for="Username">Username:</label>
+            <input class="form-control" rows="5" id="Username" type="text" name="Username"></input>
+
+            <br>
+
+            <label for="Password">Password:</label>
+            <input class="form-control" rows="5" id="Password" type="password" name="Password"></input>
+
+            <br>
+
+            <label for="food">Favorite Food:</label>
+            <input class="form-control" rows="5" id="food" type="text" name="food"></input>
+
+            <br>
+            <input class="btn btn-primary" type="submit" value="Submit"/>
+        </form>
+    </div>
+</main>
+{% endblock %}

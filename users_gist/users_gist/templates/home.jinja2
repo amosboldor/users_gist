@@ -1,0 +1,10 @@
+{% extends "layout.jinja2" %}
+{% block main %}
+<main class="container">
+    <ul>
+      {% for user in users %}
+        <li><a href="request.route_url('/user/user.username')">{{ user.first_name }}</a></li>
+      {% endfor %}
+    </ul>
+</main>
+{% endblock %}
